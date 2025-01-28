@@ -26,9 +26,7 @@ async def run_analysis_async(query):
 
     # Verify the loaded matrix
     rand_activations = rand_activations_sparse_loaded.toarray()
-    # print(rand_activations_dense)
 
-    # rand_activations = ckpt["rand_activations"]
     rand_labels = ckpt["rand_labels"]
     rand_ds = ckpt["rand_ds"]
 
@@ -82,8 +80,9 @@ def run_analysis(query):
 # Streamlit app
 st.title("Dataset Analysis using SAEs")
 
-query = st.text_input("Enter your query:", "presence of misspelled words")
+query = st.text_input("Enter your query:", "presence of misspelled words", on_change=lambda: setattr(st.session_state, 'run_analysis_flag', True))
 
-if st.button("Run Analysis"):
+if st.button("Run Analysis") or st.session_state.get('run_analysis_flag', False):
     df = run_analysis(query)
     st.dataframe(df)
+    st.session_state.run_analysis_flag = False
