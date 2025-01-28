@@ -53,7 +53,11 @@ async def run_analysis_async(query):
 
     cnt = 0
     for i in ds_indices:
-        ds_feature = top_features[int(best_nonzero_feature(top_feat_activations[i])[0])]
+        best_feature_index = best_nonzero_feature(top_feat_activations[i])[0]
+        if best_feature_index == float("inf"):
+            break
+
+        ds_feature = top_features[int(best_feature_index)]
         data["Data"].append(rand_ds[i])
         data["Category"].append(rand_labels[i])
         data["Feature"].append(ds_feature.label)
